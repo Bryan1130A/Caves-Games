@@ -6,22 +6,39 @@ import { supabase } from '../superbase/Config';
 export default function RegisterScreen() {
 
   const navigation = useNavigation()
-    const [usuario, setusuario] = useState('');
-    const [correo, setcorreo] = useState('');
-    const [telefono, settelefono] = useState('');
-    const [contrasenia, setcontrasenia] = useState('');
+  const [usuario, setusuario] = useState('');
+  const [correo, setcorreo] = useState('');
+  const [telefono, settelefono] = useState('');
+  const [contrasenia, setcontrasenia] = useState('');
 
-     async function GuardarRegistro() {
+  async function registro() {
 
     if (!usuario || !correo || !telefono || !contrasenia) {
       Alert.alert("Todos los campos son obligatorios")
       return
     }
 
+    const { data, error } = await supabase.auth.signUp({
+      email: correo,
+      password: contrasenia,
+    })
+
+    if (error) {
+      Alert.alert("Error al registrar usuario")
+      return
+    }
+
+    
+  }
+
+
+  async function GuardarRegistro(uid:String) {
+
     const { error } = await supabase
       .from('registro')
       .insert([
         {
+          id: uid,
           usuario: usuario,
           correo: correo,
           telefono: telefono,
@@ -30,9 +47,9 @@ export default function RegisterScreen() {
       ])
 
     if (error) {
-      Alert.alert("Error")
+      Alert.alert("Error al guardar registro")
     } else {
-      Alert.alert("Registro guardado")
+      Alert.alert("Registro guardado correctamente")
       limpiarCampos()
     }
   }
@@ -43,6 +60,9 @@ export default function RegisterScreen() {
     settelefono('')
     setcontrasenia('')
   }
+
+
+
     
 
   return (
@@ -98,7 +118,7 @@ export default function RegisterScreen() {
       />
 
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText} onPress={() => GuardarRegistro()}>Crear cuenta</Text>
+        <Text style={styles.buttonText} onPress={() => registro()}>Crear cuenta</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate("Login" as never)}>

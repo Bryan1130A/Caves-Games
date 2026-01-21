@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function WelcomeScreen() {
 
-  const navigation = useNavigation();
+  const navigation = useNavigation( );
 
   return (
     <View style={styles.container}>
@@ -50,14 +50,14 @@ export default function WelcomeScreen() {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,                     // ocupa toda la pantalla
-    justifyContent: 'center',    // centra verticalmente
-    alignItems: 'center',        // centra horizontalmente
+    flex: 1,                     
+    justifyContent: 'center',  
+    alignItems: 'center',        
     padding: 25,
     backgroundColor: '#fff',
   },
   logo: {
-    width: 300,                   // tamaño del logo
+    width: 300,                  
     height: 300,
     marginBottom: 20,
     resizeMode: 'contain',
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 34,
     fontWeight: 'bold',
-    color: '#000000',            // azul principal
+    color: '#000000',            
     marginBottom: 10,
   },
   subtitulo: {
