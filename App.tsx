@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
-import StackNavigator from './navigations/StackNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import PerfilScreen from './screens/PerfilScreen';
+import StackNavigator from './navigator/StackNavigator';
 
 export default function App() {
   return (

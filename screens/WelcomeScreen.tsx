@@ -2,9 +2,8 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 
-export default function WelcomeScreen() {
+export default function WelcomeScreen({navigation}: any) {
 
-  const navigation = useNavigation( );
 
   return (
     <View style={styles.container}>
@@ -20,7 +19,7 @@ export default function WelcomeScreen() {
 
       <TouchableOpacity 
         style={styles.button}
-        onPress={() => navigation.navigate("Perfil" as never)}
+        onPress={() => navigation.navigate("Perfil")}
       >
         <Text style={styles.buttonText}>Perfil</Text>
       </TouchableOpacity>

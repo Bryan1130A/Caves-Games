@@ -3,9 +3,8 @@ import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { supabase } from '../superbase/Config';
 
-export default function RegisterScreen() {
+export default function RegisterScreen({navigation}: any) {
 
-  const navigation = useNavigation()
   const [usuario, setusuario] = useState('');
   const [correo, setcorreo] = useState('');
   const [telefono, settelefono] = useState('');
@@ -27,8 +26,12 @@ export default function RegisterScreen() {
       Alert.alert("Error al registrar usuario")
       return
     }
+if(data.user!=null){
 
-    
+      GuardarRegistro(data.user.id)
+      navigation.navigate("Login")
+    }
+
   }
 
 

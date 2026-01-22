@@ -6,9 +6,8 @@ import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { supabase } from '../superbase/Config';
 
-export default function LoginScreen() {
+export default function LoginScreen({navigation}: any) {
 
-  const navigation = useNavigation()
   const [usuario, setUsuario] = useState('')
 const [contrasenia, setContrasenia] = useState('')
 
@@ -44,7 +43,7 @@ const [contrasenia, setContrasenia] = useState('')
       return
     }
 
-    navigation.navigate('Welcome' as never)
+    navigation.navigate('Login')
   }
 
   return (
