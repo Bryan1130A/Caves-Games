@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "caves-games",
+    "name": "cargando...",
     "slug": "caves-games",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/consola-de-juego.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {

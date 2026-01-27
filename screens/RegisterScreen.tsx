@@ -41,18 +41,17 @@ if(data.user!=null){
       .from('registro')
       .insert([
         {
-          id: uid,
+          uid: uid,
           usuario: usuario,
           correo: correo,
           telefono: telefono,
-          contrasenia: contrasenia
         }
       ])
 
     if (error) {
-      Alert.alert("Error al guardar registro")
+     alert(error.message)
     } else {
-      Alert.alert("Registro guardado correctamente")
+      alert("Registro guardado correctamente")
       limpiarCampos()
     }
   }
@@ -125,7 +124,7 @@ if(data.user!=null){
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate("Login" as never)}>
-        <Text style={styles.link}>Ya tengo cuenta</Text>
+        <Text style={styles.link}>Ya re registraste?inicia secion aqui </Text>
       </TouchableOpacity>
 
     </View>
