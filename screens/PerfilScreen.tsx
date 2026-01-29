@@ -5,7 +5,9 @@ import { supabase } from '../superbase/Config'
 export default function PerfilScreen({ navigation }: any) {
   const [uid, setUid] = useState<string>('')
   const [correo, setCorreo] = useState<string>('')
-  const [telefono, setTelefono] = useState<string>('')
+
+  const [telefono, setTelefono] = useState<string>('') // lo que está guardado
+  const [telefonoEdit, setTelefonoEdit] = useState<string>('') // ✅ lo editable
 
   const [usuario, setUsuario] = useState<string>('')
   const [usuarioEdit, setUsuarioEdit] = useState<string>('')
@@ -49,7 +51,9 @@ export default function PerfilScreen({ navigation }: any) {
       setUsuario(nombre)
       setUsuarioEdit(nombre)
       setCorreo(cor)
+
       setTelefono(tel)
+      setTelefonoEdit(tel) // ✅ cargar también al editable
     } catch (e: any) {
       console.log(e)
       Alert.alert('Error', 'No se pudo cargar el perfil')
@@ -67,17 +71,36 @@ export default function PerfilScreen({ navigation }: any) {
       return
     }
 
+    // ✅ validar teléfono editable
+    const telEdit = telefonoEdit.trim()
+    if (!telEdit) {
+      Alert.alert('Validación', 'El número de teléfono no puede estar vacío')
+      return
+    }
+
+    const telLimpio = telEdit.replace(/\D/g, '')
+    if (telLimpio.length < 10) {
+      Alert.alert('Validación', 'El número debe tener al menos 10 dígitos')
+      return
+    }
+
     try {
       setGuardando(true)
 
       const { error } = await supabase
         .from('registro')
-        .upsert({ uid: uid, usuario: nuevo, correo: correo, telefono: telefono }, { onConflict: 'uid' })
+        .upsert(
+          { uid: uid, usuario: nuevo, correo: correo, telefono: telLimpio },
+          { onConflict: 'uid' }
+        )
 
       if (error) throw error
 
       setUsuario(nuevo)
-      Alert.alert('Listo', 'Nombre de usuario actualizado')
+      setTelefono(telLimpio)        // ✅ actualiza lo guardado
+      setTelefonoEdit(telLimpio)    // ✅ deja el input sincronizado
+
+      Alert.alert('Listo', 'Datos actualizados correctamente')
     } catch (e: any) {
       console.log(e)
       Alert.alert('Error', 'No se pudo guardar el usuario')
@@ -102,7 +125,7 @@ export default function PerfilScreen({ navigation }: any) {
 
   return (
     <ImageBackground
-      source={{ uri: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=60' }}
+      source={{ uri: 'https://www.soy502.com/sites/default/files/styles/full_node/public/jill_valentine.jpg' }}
       style={styles.bg}
       resizeMode="cover"
     >
@@ -121,7 +144,15 @@ export default function PerfilScreen({ navigation }: any) {
           <Text style={styles.value}>{correo || 'Sin correo'}</Text>
 
           <Text style={styles.label}>TELÉFONO:</Text>
-          <Text style={styles.value}>{telefono || 'Sin teléfono'}</Text>
+          {/* ✅ ahora editable */}
+          <TextInput
+            value={telefonoEdit}
+            onChangeText={setTelefonoEdit}
+            placeholder="Escribe tu teléfono"
+            placeholderTextColor="rgba(255,255,255,0.35)"
+            keyboardType="phone-pad"
+            style={styles.input}
+          />
 
           <Text style={styles.label}>USUARIO:</Text>
           <TextInput
@@ -135,13 +166,20 @@ export default function PerfilScreen({ navigation }: any) {
           <Text style={styles.label}>ESTADO:</Text>
           <Text style={styles.estado}>CONECTADO</Text>
 
-          <TouchableOpacity style={[styles.boton, guardando && { opacity: 0.7 }]} onPress={guardarUsuario} disabled={guardando}>
-            <Text style={styles.botonTexto}>{guardando ? 'GUARDANDO...' : 'GUARDAR USUARIO'}</Text>
+          <TouchableOpacity
+            style={[styles.boton, guardando && { opacity: 0.7 }]}
+            onPress={guardarUsuario}
+            disabled={guardando}
+          >
+            <Text style={styles.botonTexto}>{guardando ? 'GUARDANDO...' : 'GUARDAR'}</Text>
           </TouchableOpacity>
         </View>
 
         <TouchableOpacity style={styles.boton2} onPress={traerPerfil}>
           <Text style={styles.botonTexto2}>RECARGAR</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.boton2} onPress={() => navigation.navigate('Score')}>
+          <Text style={styles.botonTexto2}>VER PUNTUACIONES</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.boton2} onPress={() => navigation.navigate('Game')}>

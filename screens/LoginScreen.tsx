@@ -1,7 +1,5 @@
-import {
-  StyleSheet, Text, View, TextInput, TouchableOpacity, Image,
-  Alert, ImageBackground, Dimensions, ActivityIndicator,
-} from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert, ImageBackground, Dimensions, ActivityIndicator,}
+ from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { supabase } from '../superbase/Config'
@@ -18,7 +16,7 @@ export default function LoginScreen({ navigation }: any) {
   const [usuario, setUsuario] = useState('')
   const [contrasenia, setContrasenia] = useState('')
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)//
   const [bioDisponible, setBioDisponible] = useState(false)
   const [bioEnabled, setBioEnabled] = useState(false)
 
@@ -75,7 +73,7 @@ export default function LoginScreen({ navigation }: any) {
               onPress: async () => {
                 await SecureStore.setItemAsync(KEY_BIO_ENABLED, '1')
                 setBioEnabled(true)
-                Alert.alert('Listo ✅', 'Biometría activada')
+                Alert.alert('Listo ', 'Biometría activada')
               },
             },
           ]

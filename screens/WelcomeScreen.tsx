@@ -28,7 +28,7 @@ export default function WelcomeScreen({ navigation }: any) {
           <View style={styles.content}>
             <Text style={styles.title}>CAVES <Text style={styles.highlight}>GAMES</Text></Text>
             <View style={styles.divider} />
-            <Text style={styles.subtitle}>EL NIVEL SIGUIENTE COMIENZA AQUÍ</Text>
+            <Text style={styles.subtitle}>EL SIGUIENTE NIVEL COMIENZA AQUÍ</Text>
           </View>
 
           <View style={styles.footer}>
