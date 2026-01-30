@@ -31,25 +31,20 @@ export default function GameScreen() {
   const [ammo, setAmmo] = useState(12)
   const [gameOver, setGameOver] = useState(false)
 
-  // ✅ usuario = uid (en tu tabla "puntuaciones" la columna usuario guarda el uid)
   const [uid, setUid] = useState('')
   const scoreGuardadoRef = useRef(false)
 
-  // recoil
   const [recoil, setRecoil] = useState(0)
   const recoilRef = useRef<any>(null)
 
-  // ✅ balas visuales
   const [bullets, setBullets] = useState<Bullet[]>([])
 
-  // ✅ música / sfx
   const musicaRef = useRef<Audio.Sound | null>(null)
   const disparoRef = useRef<Audio.Sound | null>(null)
   const [audioOn, setAudioOn] = useState(true)
 
   const tick = useMemo(() => clamp(140 - level * 8, 60, 140), [level])
 
-  // ✅ cargar UID de sesión (YA NO email)
   useEffect(() => {
     ;(async () => {
       try {
@@ -64,7 +59,6 @@ export default function GameScreen() {
     })()
   }, [])
 
-  // ✅ Música + sonidos
   useEffect(() => {
     ;(async () => {
       try {
@@ -74,14 +68,12 @@ export default function GameScreen() {
           shouldDuckAndroid: true,
         })
 
-        // 🎵 música (pon tu archivo)
         const { sound: music } = await Audio.Sound.createAsync(
           require('../assets/music/beats-20-474734.mp3'),
           { isLooping: true, volume: 0.45 }
         )
         musicaRef.current = music
 
-        // 🔫 sfx disparo (pon tu archivo)
         const { sound: shootSfx } = await Audio.Sound.createAsync(
           require('../assets/music/lazer-gun-432285.mp3'),
           { volume: 0.9 }
@@ -111,10 +103,8 @@ export default function GameScreen() {
         } catch {}
       })()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // ✅ prender/apagar música
   useEffect(() => {
     ;(async () => {
       try {
@@ -125,7 +115,6 @@ export default function GameScreen() {
     })()
   }, [audioOn])
 
-  // ✅ animación simple de balas (visual)
   useEffect(() => {
     const id = setInterval(() => {
       setBullets((prev) =>
@@ -137,7 +126,6 @@ export default function GameScreen() {
     return () => clearInterval(id)
   }, [])
 
-  // ✅ guardar score al Game Over (usuario=uid)
   useEffect(() => {
     if (!gameOver) return
     if (scoreGuardadoRef.current) return
@@ -170,7 +158,6 @@ const { error } = await supabase
     })()
   }, [gameOver, score, uid])
 
-  // loop juego
   useEffect(() => {
     if (gameOver) return
 
@@ -230,18 +217,14 @@ const { error } = await supabase
 
     setAmmo((a) => Math.max(0, a - 3))
 
-    // ✅ bala roja visual
     setBullets((b) => b.concat([{ id: rid(), lane, t: 0 }]))
 
-    // ✅ sonido disparo
     playShootSound()
 
-    // recoil
     setRecoil(1)
     if (recoilRef.current) clearTimeout(recoilRef.current)
     recoilRef.current = setTimeout(() => setRecoil(0), 110)
 
-    // pega al enemigo más cercano en tu carril (tu lógica igual)
     setEnemies((prev) => {
       const targets = prev
         .filter((e) => e.lane === lane)
@@ -268,7 +251,6 @@ const { error } = await supabase
     setRecoil(0)
     setBullets([])
 
-    // ✅ permitir guardar en el siguiente game over
     scoreGuardadoRef.current = false
   }
 
@@ -282,7 +264,6 @@ const { error } = await supabase
   const enemyAlpha = nearest ? clamp((120 - nearest.z) / 100, 0.2, 1) : 0
   const crosshairLeft = lane === -1 ? '34%' : lane === 1 ? '58%' : '46%'
 
-  // ✅ posición de balas por carril
   const bulletLeftForLane = (l: -1 | 0 | 1) => (l === -1 ? '34%' : l === 1 ? '58%' : '46%')
 
   return (
@@ -293,7 +274,6 @@ const { error } = await supabase
     >
       <View style={styles.overlay} />
 
-      {/* HUD TOP */}
       <View style={styles.hud}>
         <Text style={styles.title}>FPS MARINE</Text>
 
@@ -312,7 +292,6 @@ const { error } = await supabase
         <Text style={styles.tip}>Dispara al carril donde estés (← / →) • Sobrevive</Text>
       </View>
 
-      {/* ESCENA */}
       <View style={styles.scene}>
         <View style={styles.ceiling} />
         <View style={styles.floor} />
@@ -327,7 +306,6 @@ const { error } = await supabase
         <View style={[styles.laneLine, { left: '50%' }]} />
         <View style={[styles.laneLine, { left: '64%' }]} />
 
-        {/* ✅ BALAS ROJAS */}
         {bullets.map((b) => (
           <View
             key={b.id}
@@ -343,7 +321,6 @@ const { error } = await supabase
           />
         ))}
 
-        {/* ENEMIGO */}
         {nearest && (
           <View
             style={[
@@ -358,17 +335,14 @@ const { error } = await supabase
           </View>
         )}
 
-        {/* MIRA */}
         <View style={[styles.crosshair, { left: crosshairLeft }]} />
 
-        {/* ARMA */}
         <View style={[styles.weapon, recoil ? styles.weaponRecoil : null]}>
           <Text style={styles.weaponText}>▮▮▮</Text>
           <Text style={styles.weaponSub}>PLASMA</Text>
         </View>
       </View>
 
-      {/* CONTROLES */}
       <View style={styles.controls}>
         <TouchableOpacity style={styles.ctrl} onPress={moveLeft} disabled={gameOver}>
           <Text style={styles.ctrlText}>←</Text>

@@ -10,7 +10,6 @@ export default function PerfilScreen({ navigation }: any) {
   const [usuario, setUsuario] = useState<string>('')
   const [usuarioEdit, setUsuarioEdit] = useState<string>('')
   
-  // ✅ ESTADO PARA CARGAR LA FOTO DEL USUARIO
   const [avatar, setAvatar] = useState<string>('https://i.postimg.cc/3R0g2k7m/user.png')
 
   const [cargando, setCargando] = useState<boolean>(true)
@@ -36,7 +35,6 @@ export default function PerfilScreen({ navigation }: any) {
       const user = session.user
       setUid(user.id)
 
-      // ✅ AÑADIDO 'avatar' EN EL SELECT
       const { data, error } = await supabase
         .from('registro')
         .select('usuario, correo, telefono, avatar') 
@@ -49,7 +47,6 @@ export default function PerfilScreen({ navigation }: any) {
       const cor = data?.correo ?? (user.email ?? '')
       const tel = data?.telefono ?? ''
       
-      // ✅ SI EXISTE URL EN LA DB, SE ACTUALIZA EL AVATAR
       if (data?.avatar) {
         setAvatar(data.avatar)
       }
@@ -91,7 +88,6 @@ export default function PerfilScreen({ navigation }: any) {
       const { error } = await supabase
         .from('registro')
         .upsert(
-          // ✅ SE MANTIENE EL AVATAR ACTUAL AL GUARDAR
           { uid: uid, usuario: nuevo, correo: correo, telefono: telLimpio, avatar: avatar },
           { onConflict: 'uid' }
         )
@@ -132,7 +128,6 @@ export default function PerfilScreen({ navigation }: any) {
       <View style={styles.overlay} />
       <View style={styles.container}>
         <View style={styles.avatarGlow}>
-          {/* ✅ LA IMAGEN AHORA ES DINÁMICA */}
           <Image source={{ uri: avatar }} style={styles.avatar} />
         </View>
 
@@ -197,7 +192,7 @@ const styles = StyleSheet.create({
     shadowColor: '#80FF00', shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.85, shadowRadius: 18, elevation: 18, marginBottom: 14,
   },
   avatar: {
-    width: 150, // Ajustado a cuadrado para que las fotos de perfil se vean mejor
+    width: 150, 
     height: 150,
     borderRadius: 75,
     resizeMode: 'cover',

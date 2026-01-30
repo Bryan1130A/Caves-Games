@@ -29,7 +29,6 @@ export default function LoginScreen({ navigation }: any) {
       setBioDisponible(compatible && enrolled)
       setBioEnabled(enabled)
 
-      // si ya está activado, intenta biometría al abrir login
       if (compatible && enrolled && enabled) {
         await loginConBiometria()
       }
@@ -55,13 +54,11 @@ export default function LoginScreen({ navigation }: any) {
         return
       }
 
-      // Guardar refresh token para poder entrar luego con biometría
       const refreshToken = data.session?.refresh_token
       if (refreshToken) {
         await SecureStore.setItemAsync(KEY_REFRESH_TOKEN, refreshToken)
       }
 
-      // Preguntar si quiere activar biometría (solo si está disponible)
       if (bioDisponible && !bioEnabled) {
         Alert.alert(
           'Activar huella / FaceID',
@@ -113,7 +110,6 @@ export default function LoginScreen({ navigation }: any) {
 
       if (!res.success) return
 
-      // recuperar refresh token guardado
       const refreshToken = await SecureStore.getItemAsync(KEY_REFRESH_TOKEN)
       if (!refreshToken) {
         Alert.alert('Biometría', 'No hay sesión guardada. Inicia con contraseña una vez.')
@@ -122,10 +118,8 @@ export default function LoginScreen({ navigation }: any) {
 
       setLoading(true)
 
-      // recrear sesión con refresh token
       const { data, error } = await supabase.auth.refreshSession({ refresh_token: refreshToken })
       if (error) {
-        // si falla, desactiva biometría para que no moleste
         await SecureStore.deleteItemAsync(KEY_BIO_ENABLED)
         await SecureStore.deleteItemAsync(KEY_REFRESH_TOKEN)
         setBioEnabled(false)
@@ -133,14 +127,12 @@ export default function LoginScreen({ navigation }: any) {
         return
       }
 
-      // actualizar refresh token
       const newRefresh = data.session?.refresh_token
       if (newRefresh) await SecureStore.setItemAsync(KEY_REFRESH_TOKEN, newRefresh)
 
       navigation.navigate('Perfil')
     } catch (e: any) {
       console.log(e)
-      // no bloquees: usuario puede usar contraseña normal
     } finally {
       setLoading(false)
     }
@@ -167,7 +159,6 @@ export default function LoginScreen({ navigation }: any) {
             <Text style={styles.subtitulo}>INICIA SESIÓN PARA JUGAR</Text>
           </View>
 
-          {/* FORMULARIO */}
           <View style={styles.form}>
             <View style={styles.inputContainer}>
               <TextInput
@@ -205,7 +196,6 @@ export default function LoginScreen({ navigation }: any) {
               )}
             </TouchableOpacity>
 
-            {/* BOTÓN BIOMÉTRICO */}
             {bioDisponible && (
               <TouchableOpacity
                 activeOpacity={0.7}

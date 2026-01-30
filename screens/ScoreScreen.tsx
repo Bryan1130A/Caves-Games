@@ -29,7 +29,6 @@ export default function ScoreScreen({ navigation }: any) {
     try {
       setCargando(true)
 
-      // ✅ 1) TOP 10 (tabla puntuaciones)
       const { data: top, error: topError } = await supabase
         .from('puntuaciones')
         .select('uid, puntuaciones')
@@ -47,7 +46,6 @@ export default function ScoreScreen({ navigation }: any) {
         return
       }
 
-      // ✅ 2) traer nombres desde registro
       const { data: regs, error: regError } = await supabase
         .from('registro')
         .select('uid, usuario')
@@ -57,7 +55,6 @@ export default function ScoreScreen({ navigation }: any) {
 
       const mapa = new Map((regs ?? []).map((r: any) => [r.uid, r.usuario]))
 
-      // ✅ 3) unir
       const final: ScoreUI[] = (top ?? []).map((t: any) => ({
         usuario: mapa.get(t.uid) ?? 'Jugador',
         puntuaciones: t.puntuaciones ?? 0,
@@ -74,7 +71,6 @@ export default function ScoreScreen({ navigation }: any) {
   useEffect(() => {
     traerTop10()
 
-    // ✅ realtime (cuando se inserte/actualice una puntuación)
     const channel = supabase
       .channel('top10-puntuaciones')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'puntuaciones' }, () => {
