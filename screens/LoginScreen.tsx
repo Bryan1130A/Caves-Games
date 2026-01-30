@@ -13,7 +13,7 @@ const KEY_BIO_ENABLED = 'bio_enabled'
 const KEY_REFRESH_TOKEN = 'sb_refresh_token'
 
 export default function LoginScreen({ navigation }: any) {
-  const [usuario, setUsuario] = useState('')
+  const [usuario, setUsuario] = useState('')  
   const [contrasenia, setContrasenia] = useState('')
 
   const [loading, setLoading] = useState(false)//
