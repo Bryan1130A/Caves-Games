@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "cargando...",
+    "name": "Caves Games",
     "slug": "caves-games",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,8 +16,9 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.cristianxd.cavesgames",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/consola-de-juego.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -28,6 +29,11 @@
     },
     "plugins": [
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "2d048a13-6aee-47c1-a77a-4c879eab8b5f"
+      }
+    }
   }
 }

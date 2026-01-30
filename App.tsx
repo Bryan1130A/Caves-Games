@@ -8,9 +8,6 @@ export default function App() {
     <NavigationContainer>
       <StackNavigator />
     </NavigationContainer>
- 
-
-    
   );
 }
 
